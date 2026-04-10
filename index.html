@@ -208,41 +208,11 @@ button:hover {
   opacity: 1;
 }
 
-/* CONTENT */
+/* CONTENT CONTAINER */
 .content {
   display: none;
-  padding: 40px 20px;
-}
-
-/* UPGRADED NOTES SECTION */
-.board {
-  margin: 30px auto 60px;
-  width: 95%;
-  max-width: 1100px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* This perfectly centers any uneven rows */
-  gap: 25px;
-}
-
-.note {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 25px 20px;
-  width: 180px; /* Uniform sizing */
-  text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-  border-top: 4px solid var(--primary-pink); /* Sleek accent line */
-  font-family: 'Caveat', cursive;
-  font-size: 26px;
-  color: #333;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.note:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+  padding: 40px 20px 80px 20px;
+  transition: opacity 0.8s ease;
 }
 
 /* CENTER TEXT */
@@ -287,14 +257,17 @@ button:hover {
   to { transform: translateX(-50%); }
 }
 
+/* POLAROID */
 .polaroid {
   background: white;
-  padding: 12px 12px 40px 12px;
+  padding: 12px;
   width: 240px;
   flex-shrink: 0;
   border-radius: 4px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
   transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .polaroid:hover {
@@ -312,31 +285,168 @@ button:hover {
   background: #eee;
 }
 
+.polaroid-caption {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.letter-btn-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.letter-btn {
+  font-size: 22px;
+  padding: 15px 40px;
+  animation: pulseText 2s infinite;
+}
+
+/* =========================================
+   NEW BLACK PAGE & SCROLL DESIGN
+   ========================================= */
+
+.black-page {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: #050505; /* Deep, rich black */
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 1s ease;
+  padding: 80px 20px;
+  box-sizing: border-box;
+}
+
+.scroll-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The Wooden Rollers */
+.roller {
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(to bottom, #4a2e15 0%, #8b5a2b 30%, #a06b35 50%, #8b5a2b 70%, #3e220b 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.2);
+  position: relative;
+  z-index: 3;
+}
+
+/* Gold end-caps for the rollers */
+.roller::before, .roller::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  width: 18px; height: 30px;
+  background: linear-gradient(to right, #b8860b, #ffd700, #b8860b);
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+.roller::before { left: -5px; }
+.roller::after { right: -5px; }
+
+.top-roller { margin-bottom: -15px; }
+.bottom-roller { margin-top: -15px; }
+
+/* The Parchment Paper */
+.paper {
+  width: 92%;
+  background: #fdf5e6;
+  background-image: linear-gradient(to right, #e3c88e 0%, #fdf5e6 8%, #fdf5e6 92%, #e3c88e 100%);
+  box-shadow: inset 0 0 40px rgba(139, 69, 19, 0.15);
+  overflow: hidden;
+  max-height: 50px; /* Rolled up tightly */
+  transition: max-height 3s cubic-bezier(0.3, 0.05, 0.1, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.paper.open {
+  max-height: 5000px; /* Expands to fit the letter */
+}
+
+/* The Red Ribbon */
+.ribbon-wrap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  transition: opacity 0.5s ease;
+  cursor: pointer;
+}
+
+.ribbon {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom, #800000, #d00000, #800000);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #ff4d4d;
+  border-bottom: 1px solid #ff4d4d;
+}
+
+.ribbon:hover {
+  background: linear-gradient(to bottom, #990000, #ff1a1a, #990000);
+}
+
+.bow {
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+
+/* The Letter Content */
+.letter-content {
+  padding: 60px 40px 80px 40px;
+  opacity: 0;
+  transition: opacity 1.5s ease 1.5s; /* Delays fade-in until paper opens */
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  color: #2b1810; /* Dark brown ink color */
+  line-height: 1.6;
+}
+
+.paper.open .letter-content {
+  opacity: 1;
+}
+
+.close-btn {
+  display: block;
+  margin: 40px auto 0;
+  background: #2b1810;
+  box-shadow: none;
+}
+.close-btn:hover {
+  background: #4a2e15;
+  transform: scale(1.05);
+}
+
 /* CONFETTI & PETALS */
-.confetti, .petal {
-  position: fixed;
-  pointer-events: none;
-  z-index: 999;
-}
+.confetti, .petal { position: fixed; pointer-events: none; z-index: 999; }
+.confetti { top: -10px; animation: confettiFall linear forwards; }
+.petal { background: #ff758f; border-radius: 15px 0 15px 0; opacity: 0.8; }
+@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); } }
 
-.confetti {
-  width: 10px;
-  height: 10px;
-  top: -10px;
-  animation: confettiFall linear forwards;
-}
-
-.petal {
-  width: 15px;
-  height: 12px;
-  background: #ff758f;
-  border-radius: 15px 0 15px 0;
-  opacity: 0.8;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
-
-@keyframes confettiFall {
-  to { transform: translateY(110vh) rotate(720deg); }
+/* For mobile text sizing */
+@media (max-width: 600px) {
+  .letter-content { font-size: 22px; padding: 40px 20px; }
 }
 </style>
 </head>
@@ -380,19 +490,6 @@ button:hover {
 
 <div class="content" id="content">
 
-  <div class="board">
-    <div class="note">I love you ❤️</div>
-    <div class="note">1 year already 🫶</div>
-    <div class="note">Still stuck with me 😌</div>
-    <div class="note">My favourite human 💖</div>
-    <div class="note">More memories to go ✨</div>
-    <div class="note">You make me smile everyday 😊</div>
-    <div class="note">Best year of my life 🥂</div>
-    <div class="note">To our late night chats 🌙</div>
-    <div class="note">And all our inside jokes 🤭</div>
-    <div class="note">I'm yours, always 💕</div>
-  </div>
-
   <div class="carousel-container top">
     <div class="carousel scroll-right" id="carouselTop"></div>
   </div>
@@ -403,7 +500,45 @@ button:hover {
     <div class="carousel scroll-left" id="carouselBottom"></div>
   </div>
 
+  <div class="letter-btn-container">
+    <button class="letter-btn" onclick="goToBlackPage()">Continue? 💌</button>
+  </div>
+
 </div>
+
+<div class="black-page" id="blackPage">
+  <div class="scroll-wrapper">
+    
+    <div class="roller top-roller"></div>
+    
+    <div class="paper" id="scrollPaper">
+      
+      <div class="ribbon-wrap" id="ribbonWrap" onclick="untieRibbon()">
+        <div class="ribbon">
+          <span class="bow"> Tap to untie </span>
+        </div>
+      </div>
+
+      <div class="letter-content" id="letterContent">
+        <h2>My Dearest Sania,</h2>
+        
+        <p>Happy 1 Year Anniversary! I can't believe it's already been a year since you rejected me</p>
+        
+        <p>This years fucking flown by so fast, we've had sooo many ups and a few downs but that's what makes this special, there has never been anyone I've loved as much as I love you my baby, we've been through sm together. Uk sometimes I look at you and I still cannot believe you are mine, it's fucking crazy how Ive trapped such a beautiful girl to fall in love with me, respect my game. We've grown too much together, ive gone from having a broken neck to having an injured back🤣 but ive been able to fight through it all j because of you. I am the person I am today only because you have been with me throughout and guided me down the correct path. Like I can't put into words how much you mean to me and how much I love you, I learnt how to fucking code for you bubs, this has taken me around 60 hrs to make and ive legit made coded this whole thing on my own with little help from AI and YouTube, so I really hope you like it.</p>
+        
+        <p>I love you forever,<br>Yours truly Moiz❤️</p>
+<p>ps ive bought this domain so every time you google lilbubzu.online you can see this</p>
+        
+        <button class="close-btn" onclick="goBackToPinkPage()">Close Letter</button>
+      </div>
+
+    </div>
+
+    <div class="roller bottom-roller"></div>
+
+  </div>
+</div>
+
 
 <script>
 /* QUESTION FLOW */
@@ -462,24 +597,111 @@ function openSite(){
   }, 800);
 }
 
-/* MEDIA CAROUSEL */
+/* MEDIA CAROUSEL WITH CAPTIONS */
 const topCarousel = document.getElementById("carouselTop");
 const bottomCarousel = document.getElementById("carouselBottom");
+
+const captions = [
+  "I love you ❤️", "1 year already 🫶", "Still stuck with me 😌", "My favourite person",
+  "More memories to go ✨", "You make me smile everyday ", "Best year of my life 🥂", "Lil Mrs. Bubzu",
+  "Can't wait for kisses", "I'm yours, always ", "My safe place ", "Forever isn't long enough ⏳",
+  "My Baby", "You and me against the world 🌍", "Every day is better with you ", "I adore you "
+];
 
 let items = [];
 
 for(let i=0; i<16; i++){
-  items.push(`<div class="polaroid"><img src="photos/${i}.JPG" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f0f0f0\\'/></svg>'"></div>`);
+  let mediaHTML = `<img src="photos/${i}.JPG" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f0f0f0\\'/></svg>'">`;
+  
   if(i < 9){
-    items.push(`<div class="polaroid"><video src="videos/${i}.MP4" autoplay muted loop playsinline></video></div>`);
+    mediaHTML = `<video src="videos/${i}.MP4" autoplay muted loop playsinline></video>`;
   }
+
+  items.push(`
+    <div class="polaroid">
+      ${mediaHTML}
+      <div class="polaroid-caption">${captions[i]}</div>
+    </div>
+  `);
 }
 
 let contentHTML = items.join("") + items.join("");
 topCarousel.innerHTML = contentHTML;
 bottomCarousel.innerHTML = contentHTML;
 
-/* CONFETTI */
+
+/* =========================================
+   NEW BLACK PAGE & SCROLL LOGIC (BUG FIXED)
+   ========================================= */
+
+function goToBlackPage() {
+  const content = document.getElementById('content');
+  const blackPage = document.getElementById('blackPage');
+  
+  // Fade out main site
+  content.style.opacity = '0';
+  
+  setTimeout(() => {
+    // Hide main site completely
+    content.style.display = 'none';
+    
+    // Show black page and fade it in
+    blackPage.style.display = 'block';
+    window.scrollTo(0, 0); // Scroll to top
+    
+    setTimeout(() => {
+      blackPage.style.opacity = '1';
+    }, 50);
+    
+  }, 800); // Matches the 0.8s CSS transition
+}
+
+function untieRibbon() {
+  const ribbonWrap = document.getElementById('ribbonWrap');
+  const paper = document.getElementById('scrollPaper');
+
+  // Fade out ribbon
+  ribbonWrap.style.opacity = '0';
+  
+  setTimeout(() => {
+    // Remove ribbon from layout so text can be clicked
+    ribbonWrap.style.display = 'none';
+    
+    // Unfurl the paper
+    paper.classList.add('open');
+  }, 500); // Matches ribbon transition
+}
+
+function goBackToPinkPage() {
+  const content = document.getElementById('content');
+  const blackPage = document.getElementById('blackPage');
+  const ribbonWrap = document.getElementById('ribbonWrap');
+  const paper = document.getElementById('scrollPaper');
+
+  // Fade out black page
+  blackPage.style.opacity = '0';
+  
+  setTimeout(() => {
+    // Hide black page
+    blackPage.style.display = 'none';
+    
+    // ** THE BUG FIX: Reset the scroll completely **
+    paper.classList.remove('open');
+    ribbonWrap.style.display = 'flex';
+    ribbonWrap.style.opacity = '1';
+    
+    // Bring back main site
+    content.style.display = 'block';
+    
+    setTimeout(() => {
+      content.style.opacity = '1';
+    }, 50);
+
+  }, 1000); // Wait for black page to fade out
+}
+
+
+/* CONFETTI & PETALS */
 function launchConfetti(){
   const colors = ["#ff4d6d", "#ffb3c6", "#ffffff", "#ff8fa3"];
   for(let i=0; i<100; i++){
@@ -496,7 +718,6 @@ function launchConfetti(){
   }
 }
 
-/* PETALS */
 function createPetal(){
   let p = document.createElement("div");
   p.className = "petal";
