@@ -5,59 +5,90 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You ❤️</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
+:root {
+  --primary-pink: #ff4d6d;
+  --bg-gradient: linear-gradient(135deg, #ffe6eb 0%, #ffc0cb 100%);
+  --text-dark: #800020;
+}
+
 body {
   margin: 0;
-  background: #FFC0CB;
-  font-family: Georgia, serif;
+  background: var(--bg-gradient);
+  font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+/* BUTTON STYLING */
+button {
+  background: var(--primary-pink);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 30px;
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+  transition: all 0.3s ease;
+  margin: 10px;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 77, 109, 0.5);
 }
 
 /* QUESTION SCREENS */
 .question-screen {
   position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:200;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
 }
 
 .box {
-  text-align:center;
-  font-size:24px;
+  text-align: center;
+  background: white;
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
 
-.box button {
-  margin:10px;
-  padding:10px 20px;
-  font-size:16px;
-  cursor:pointer;
+.box p {
+  font-size: 28px;
+  font-family: 'Caveat', cursive;
+  margin-bottom: 25px;
 }
 
 /* NO SCREEN */
 .no-screen {
   position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:black;
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:30px;
-  z-index:300;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #1a1a1a;
+  color: #ff4d6d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  font-family: 'Caveat', cursive;
+  z-index: 300;
 }
 
 /* ENVELOPE */
 .envelope-screen {
-  display:none;
+  display: none;
   height: 100vh;
   justify-content: center;
   align-items: center;
@@ -66,142 +97,185 @@ body {
 }
 
 .envelope {
-  width: 260px;
-  height: 170px;
-  background: #ff9eb5;
+  width: 280px;
+  height: 180px;
+  background: #ffb3c6;
   position: relative;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 40px rgba(255, 77, 109, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.envelope:hover {
+  transform: translateY(-5px);
 }
 
 .envelope-flap {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #D02E77;
-  clip-path: polygon(0 0,50% 60%,100% 0);
+  background: #ff4d6d;
+  clip-path: polygon(0 0, 50% 55%, 100% 0);
   transform-origin: top;
   transition: transform 1s cubic-bezier(0.65,0,0.35,1);
+  border-radius: 12px 12px 0 0;
+  z-index: 2;
+}
+
+.envelope-body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ff758f;
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+  border-radius: 12px;
+  z-index: 1;
 }
 
 .open .envelope-flap {
-  transform: rotateX(-160deg);
+  transform: rotateX(-180deg);
 }
 
 .heart {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
+  top: 55%; left: 50%;
+  transform: translate(-50%, -50%);
   background: white;
-  width: 60px; height: 60px;
+  width: 65px; height: 65px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 35px;
+  z-index: 3;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  animation: heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
 }
 
 .tap-text {
-  margin-top: 20px;
-  color: #D02E77;
+  margin-top: 30px;
+  color: var(--primary-pink);
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  animation: pulseText 2s infinite;
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 /* INTRO SCREEN */
 .intro-screen {
   position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 1s ease;
-  z-index:100;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+  z-index: 100;
 }
 
 .intro-screen.show {
-  opacity:1;
+  opacity: 1;
 }
 
 .intro-card {
-  background:#FDF5E6;
-  color:#D02E77;
-  padding:30px 50px;
-  font-size:28px;
-  border-radius:10px;
-  transform:scale(0.8);
-  opacity:0;
-  transition:all 0.8s ease;
+  background: white;
+  color: var(--primary-pink);
+  padding: 40px 60px;
+  font-size: 45px;
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(255, 77, 109, 0.15);
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .intro-screen.show .intro-card {
-  transform:scale(1);
-  opacity:1;
+  transform: scale(1);
+  opacity: 1;
 }
 
 /* CONTENT */
 .content {
   display: none;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
-/* STICKY NOTES */
+/* UPGRADED NOTES SECTION */
 .board {
-  margin: 30px auto;
-  width: 90%;
-  max-width: 900px;
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 20px;
+  margin: 30px auto 60px;
+  width: 95%;
+  max-width: 1100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* This perfectly centers any uneven rows */
+  gap: 25px;
 }
 
 .note {
-  background: #fff8a6;
-  padding: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 25px 20px;
+  width: 180px; /* Uniform sizing */
   text-align: center;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-  border-radius: 6px;
-  transform: rotate(-2deg);
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  border-top: 4px solid var(--primary-pink); /* Sleek accent line */
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  color: #333;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.note:nth-child(2){ transform: rotate(2deg); }
-.note:nth-child(4){ transform: rotate(1deg); }
+
+.note:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+}
 
 /* CENTER TEXT */
 .center-text {
   text-align: center;
-  font-size: 34px;
-  color: #D02E77;
-  margin: 40px 0;
+  font-size: 50px;
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  color: var(--primary-pink);
+  margin: 60px 0;
+  text-shadow: 2px 2px 4px rgba(255, 77, 109, 0.2);
 }
 
 /* CAROUSEL */
 .carousel-container {
   overflow: hidden;
-  margin: 20px 0;
+  margin: 30px 0;
+  padding: 20px 0;
 }
 
-.carousel-container.top {
-  transform: rotate(-2deg);
-}
-.carousel-container.bottom {
-  transform: rotate(2deg);
-}
+.carousel-container.top { transform: rotate(-1deg); }
+.carousel-container.bottom { transform: rotate(1deg); }
 
 .carousel {
   display: flex;
-  gap: 20px;
+  gap: 25px;
   width: max-content;
 }
 
-.scroll-right {
-  animation: scrollRight 60s linear infinite;
-}
-.scroll-left {
-  animation: scrollLeft 55s linear infinite;
-}
+.scroll-right { animation: scrollRight 60s linear infinite; }
+.scroll-left { animation: scrollLeft 60s linear infinite; }
+
+.carousel:hover { animation-play-state: paused; }
 
 @keyframes scrollRight {
   from { transform: translateX(-50%); }
@@ -215,43 +289,54 @@ body {
 
 .polaroid {
   background: white;
-  padding: 10px 10px 30px;
-  width: 220px;
+  padding: 12px 12px 40px 12px;
+  width: 240px;
   flex-shrink: 0;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  transition: transform 0.3s;
+}
+
+.polaroid:hover {
+  transform: scale(1.05) translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  z-index: 10;
 }
 
 .polaroid img,
 .polaroid video {
   width: 100%;
-  height: 220px;
+  height: 240px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 2px;
+  background: #eee;
 }
 
-/* CONFETTI */
-.confetti {
+/* CONFETTI & PETALS */
+.confetti, .petal {
   position: fixed;
-  width: 8px;
-  height: 8px;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.confetti {
+  width: 10px;
+  height: 10px;
   top: -10px;
   animation: confettiFall linear forwards;
 }
 
-@keyframes confettiFall {
-  to { transform: translateY(110vh); }
+.petal {
+  width: 15px;
+  height: 12px;
+  background: #ff758f;
+  border-radius: 15px 0 15px 0;
+  opacity: 0.8;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-/* PETALS */
-.petal {
-  position: fixed;
-  width: 10px;
-  height: 6px;
-  background: #e75480;
-  border-radius: 50%;
-  opacity: 0.7;
-  pointer-events: none;
+@keyframes confettiFall {
+  to { transform: translateY(110vh) rotate(720deg); }
 }
 </style>
 </head>
@@ -260,20 +345,19 @@ body {
 
 <audio id="music" src="blindspot.mp3" loop></audio>
 
-<!-- QUESTIONS -->
 <div id="q1" class="question-screen">
   <div class="box">
-    <p>are you ready for ur gift?</p>
-    <button onclick="goQ2()">yes</button>
-    <button onclick="showNo()">no</button>
+    <p>Are you ready for ur gift?</p>
+    <button onclick="goQ2()">Yes</button>
+    <button onclick="showNo()">No</button>
   </div>
 </div>
 
 <div id="q2" class="question-screen" style="display:none;">
   <div class="box">
-    <p>are you sure?????</p>
-    <button onclick="startMain()">yes</button>
-    <button onclick="showNo()">no</button>
+    <p>Are you sure?????</p>
+    <button onclick="startMain()">Yes</button>
+    <button onclick="showNo()">No</button>
   </div>
 </div>
 
@@ -281,21 +365,19 @@ body {
   <p>well then fuck you</p>
 </div>
 
-<!-- ENVELOPE -->
 <div class="envelope-screen" onclick="openSite()">
   <div class="envelope">
     <div class="envelope-flap"></div>
+    <div class="envelope-body"></div>
     <div class="heart">❤️</div>
   </div>
-  <div class="tap-text">open for ur surprise</div>
+  <div class="tap-text">Tap to open ur surprise</div>
 </div>
 
-<!-- INTRO -->
 <div class="intro-screen" id="intro">
   <div class="intro-card">Happy 1 Year Bubzu ❤️</div>
 </div>
 
-<!-- CONTENT -->
 <div class="content" id="content">
 
   <div class="board">
@@ -304,6 +386,11 @@ body {
     <div class="note">Still stuck with me 😌</div>
     <div class="note">My favourite human 💖</div>
     <div class="note">More memories to go ✨</div>
+    <div class="note">You make me smile everyday 😊</div>
+    <div class="note">Best year of my life 🥂</div>
+    <div class="note">To our late night chats 🌙</div>
+    <div class="note">And all our inside jokes 🤭</div>
+    <div class="note">I'm yours, always 💕</div>
   </div>
 
   <div class="carousel-container top">
@@ -319,35 +406,44 @@ body {
 </div>
 
 <script>
-
 /* QUESTION FLOW */
 function goQ2(){
-  q1.style.display="none";
-  q2.style.display="flex";
+  document.getElementById('q1').style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('q1').style.display = "none";
+    document.getElementById('q2').style.display = "flex";
+  }, 300);
 }
 
 function startMain(){
-  q2.style.display="none";
-  document.querySelector(".envelope-screen").style.display="flex";
+  document.getElementById('q2').style.display = "none";
+  document.querySelector(".envelope-screen").style.display = "flex";
 }
 
 function showNo(){
-  q1.style.display="none";
-  q2.style.display="none";
-  noScreen.style.display="flex";
+  document.getElementById('q1').style.display = "none";
+  document.getElementById('q2').style.display = "none";
+  document.getElementById('noScreen').style.display = "flex";
 }
 
 /* MAIN FLOW */
 function openSite(){
   document.querySelector('.envelope').classList.add('open');
-  document.getElementById("music").play().catch(()=>{});
+  
+  let music = document.getElementById("music");
+  music.volume = 0.5;
+  music.play().catch(()=>{ console.log("Audio autoplay blocked"); });
 
   launchConfetti();
-  setTimeout(startPetals,1000);
+  setTimeout(startPetals, 1000);
 
   setTimeout(()=>{
-    document.querySelector(".envelope-screen").style.display="none";
+    document.querySelector(".envelope-screen").style.opacity = "0";
+    setTimeout(() => {
+      document.querySelector(".envelope-screen").style.display = "none";
+    }, 500);
 
+    let intro = document.getElementById('intro');
     intro.classList.add("show");
 
     setTimeout(()=>{
@@ -355,23 +451,26 @@ function openSite(){
 
       setTimeout(()=>{
         intro.style.display="none";
+        let content = document.getElementById('content');
         content.style.display="block";
-      },1000);
+        
+        content.animate([{opacity: 0}, {opacity: 1}], {duration: 1000, fill: 'forwards'});
+      }, 1000);
 
-    },2500);
+    }, 2800);
 
-  },800);
+  }, 800);
 }
 
-/* MEDIA */
+/* MEDIA CAROUSEL */
 const topCarousel = document.getElementById("carouselTop");
 const bottomCarousel = document.getElementById("carouselBottom");
 
-let items=[];
+let items = [];
 
-for(let i=0;i<16;i++){
-  items.push(`<div class="polaroid"><img src="photos/${i}.JPG"></div>`);
-  if(i<9){
+for(let i=0; i<16; i++){
+  items.push(`<div class="polaroid"><img src="photos/${i}.JPG" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f0f0f0\\'/></svg>'"></div>`);
+  if(i < 9){
     items.push(`<div class="polaroid"><video src="videos/${i}.MP4" autoplay muted loop playsinline></video></div>`);
   }
 }
@@ -382,44 +481,48 @@ bottomCarousel.innerHTML = contentHTML;
 
 /* CONFETTI */
 function launchConfetti(){
-  const colors=["#ff4d6d","#ffd166","#06d6a0","#118ab2"];
-  for(let i=0;i<80;i++){
-    let c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=colors[Math.floor(Math.random()*colors.length)];
-    c.style.animationDuration=(Math.random()*2+2)+"s";
+  const colors = ["#ff4d6d", "#ffb3c6", "#ffffff", "#ff8fa3"];
+  for(let i=0; i<100; i++){
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    let size = Math.random() * 8 + 5;
+    c.style.width = size + "px";
+    c.style.height = size + "px";
+    c.style.animationDuration = (Math.random() * 3 + 2) + "s";
     document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+    setTimeout(() => c.remove(), 5000);
   }
 }
 
 /* PETALS */
 function createPetal(){
-  let p=document.createElement("div");
-  p.className="petal";
+  let p = document.createElement("div");
+  p.className = "petal";
 
-  let startX=Math.random()*window.innerWidth;
-  let drift=(Math.random()-0.5)*150;
-  let duration=Math.random()*4+6;
+  let startX = Math.random() * window.innerWidth;
+  let drift = (Math.random() - 0.5) * 200;
+  let duration = Math.random() * 5 + 7;
 
-  p.style.left=startX+"px";
-  p.style.top="-10px";
+  p.style.left = startX + "px";
+  p.style.top = "-20px";
 
   document.body.appendChild(p);
 
-  let start=null;
+  let start = null;
 
   function animate(t){
-    if(!start) start=t;
-    let progress=(t-start)/(duration*1000);
+    if(!start) start = t;
+    let progress = (t - start) / (duration * 1000);
 
-    let y=progress*window.innerHeight;
-    let x=startX+drift*Math.sin(progress*Math.PI);
+    let y = progress * (window.innerHeight + 50);
+    let x = startX + drift * Math.sin(progress * Math.PI * 2);
+    let rotation = progress * 720;
 
-    p.style.transform=`translate(${x}px,${y}px) rotate(${progress*360}deg)`;
+    p.style.transform = `translate(${x - startX}px, ${y}px) rotate(${rotation}deg) rotateX(${rotation/2}deg)`;
 
-    if(progress<1){
+    if(progress < 1){
       requestAnimationFrame(animate);
     } else {
       p.remove();
@@ -430,9 +533,8 @@ function createPetal(){
 }
 
 function startPetals(){
-  setInterval(createPetal,300);
+  setInterval(createPetal, 400);
 }
-
 </script>
 
 </body>
