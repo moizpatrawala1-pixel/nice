@@ -10,8 +10,11 @@
 <style>
 :root {
   --primary-pink: #ff4d6d;
+  --dark-pink: #d63384;
+  --light-pink: #ffb3c6;
   --bg-gradient: linear-gradient(135deg, #ffe6eb 0%, #ffc0cb 100%);
   --text-dark: #800020;
+  --cream: #fdf5e6;
 }
 
 body {
@@ -23,7 +26,7 @@ body {
   min-height: 100vh;
 }
 
-/* BUTTON STYLING */
+/* ===== FRIEND'S BOUNCY BUTTONS ===== */
 button {
   background: var(--primary-pink);
   color: white;
@@ -35,40 +38,60 @@ button {
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   margin: 10px;
 }
 
 button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(255, 77, 109, 0.5);
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 8px 25px rgba(255, 77, 109, 0.5);
 }
 
-/* QUESTION SCREENS */
+button:active {
+  transform: translateY(-1px);
+}
+
+/* ===== FRIEND'S SLICK QUESTION SCREENS ===== */
 .question-screen {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 200;
+  animation: fadeIn 0.5s ease;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .box {
   text-align: center;
   background: white;
-  padding: 40px 60px;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  padding: 50px 70px;
+  border-radius: 25px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+  animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 80%;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .box p {
-  font-size: 28px;
+  font-size: 32px;
   font-family: 'Caveat', cursive;
-  margin-bottom: 25px;
+  margin-bottom: 35px;
+  font-weight: 700;
+  color: var(--primary-pink);
 }
 
 /* NO SCREEN */
@@ -76,17 +99,18 @@ button:hover {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: #1a1a1a;
-  color: #ff4d6d;
+  background: #0a0a0a;
+  color: var(--primary-pink);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 40px;
+  font-size: 42px;
   font-family: 'Caveat', cursive;
   z-index: 300;
+  animation: fadeIn 0.4s ease;
 }
 
-/* ENVELOPE */
+/* ===== FRIEND'S UPGRADED ENVELOPE ===== */
 .envelope-screen {
   display: none;
   height: 100vh;
@@ -94,31 +118,38 @@ button:hover {
   align-items: center;
   flex-direction: column;
   cursor: pointer;
+  transition: opacity 0.5s ease;
 }
 
 .envelope {
-  width: 280px;
-  height: 180px;
-  background: #ffb3c6;
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(135deg, #ffb3c6 0%, #ff9eb5 100%);
   position: relative;
-  border-radius: 12px;
-  box-shadow: 0 15px 40px rgba(255, 77, 109, 0.2);
-  transition: transform 0.3s ease;
+  border-radius: 15px;
+  box-shadow: 0 20px 50px rgba(255, 77, 109, 0.25);
+  transition: all 0.4s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
 .envelope:hover {
-  transform: translateY(-5px);
+  box-shadow: 0 25px 60px rgba(255, 77, 109, 0.35);
 }
 
 .envelope-flap {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #ff4d6d;
-  clip-path: polygon(0 0, 50% 55%, 100% 0);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, #ff1744 100%);
+  clip-path: polygon(0 0, 50% 60%, 100% 0);
   transform-origin: top;
-  transition: transform 1s cubic-bezier(0.65,0,0.35,1);
-  border-radius: 12px 12px 0 0;
+  transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
+  border-radius: 15px 15px 0 0;
   z-index: 2;
 }
 
@@ -126,9 +157,8 @@ button:hover {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #ff758f;
-  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #ff8aa6 0%, #ff758f 100%);
+  border-radius: 15px;
   z-index: 1;
 }
 
@@ -138,36 +168,37 @@ button:hover {
 
 .heart {
   position: absolute;
-  top: 55%; left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  width: 65px; height: 65px;
+  width: 70px; height: 70px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 35px;
+  font-size: 38px;
   z-index: 3;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  animation: heartbeat 1.5s infinite;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  animation: heartbeat 1.5s ease-in-out infinite;
 }
 
 @keyframes heartbeat {
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.1); }
+  50% { transform: translate(-50%, -50%) scale(1.12); }
 }
 
 .tap-text {
-  margin-top: 30px;
+  margin-top: 35px;
   color: var(--primary-pink);
   font-family: 'Caveat', cursive;
-  font-size: 28px;
-  animation: pulseText 2s infinite;
+  font-size: 32px;
+  font-weight: 700;
+  animation: pulse-text 2s ease-in-out infinite;
 }
 
-@keyframes pulseText {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+@keyframes pulse-text {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
 }
 
 /* INTRO SCREEN */
@@ -201,6 +232,7 @@ button:hover {
   transform: scale(0.8);
   opacity: 0;
   transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-align: center;
 }
 
 .intro-screen.show .intro-card {
@@ -211,7 +243,7 @@ button:hover {
 /* CONTENT CONTAINER */
 .content {
   display: none;
-  padding: 40px 20px 80px 20px;
+  padding: 40px 0 80px 0;
   transition: opacity 0.8s ease;
 }
 
@@ -222,7 +254,7 @@ button:hover {
   font-family: 'Caveat', cursive;
   font-weight: 700;
   color: var(--primary-pink);
-  margin: 60px 0;
+  margin: 60px 20px;
   text-shadow: 2px 2px 4px rgba(255, 77, 109, 0.2);
 }
 
@@ -231,6 +263,7 @@ button:hover {
   overflow: hidden;
   margin: 30px 0;
   padding: 20px 0;
+  width: 100%;
 }
 
 .carousel-container.top { transform: rotate(-1deg); }
@@ -302,25 +335,46 @@ button:hover {
 .letter-btn {
   font-size: 22px;
   padding: 15px 40px;
-  animation: pulseText 2s infinite;
+  animation: pulse-text 2.5s ease-in-out infinite;
 }
 
 /* =========================================
-   NEW BLACK PAGE & SCROLL DESIGN
+   STARRY NIGHT PAGE & SCROLL
    ========================================= */
 
 .black-page {
-  display: none; /* Hidden by default */
+  display: none; 
   position: absolute;
   top: 0; left: 0;
   width: 100%;
   min-height: 100vh;
-  background: #050505; /* Deep, rich black */
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
   z-index: 500;
   opacity: 0;
   transition: opacity 1s ease;
   padding: 80px 20px;
   box-sizing: border-box;
+  overflow: hidden; 
+}
+
+.stars {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 5px white; }
 }
 
 .scroll-wrapper {
@@ -330,9 +384,9 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 10; 
 }
 
-/* The Wooden Rollers */
 .roller {
   width: 100%;
   height: 40px;
@@ -343,7 +397,6 @@ button:hover {
   z-index: 3;
 }
 
-/* Gold end-caps for the rollers */
 .roller::before, .roller::after {
   content: '';
   position: absolute;
@@ -359,24 +412,22 @@ button:hover {
 .top-roller { margin-bottom: -15px; }
 .bottom-roller { margin-top: -15px; }
 
-/* The Parchment Paper */
 .paper {
   width: 92%;
   background: #fdf5e6;
   background-image: linear-gradient(to right, #e3c88e 0%, #fdf5e6 8%, #fdf5e6 92%, #e3c88e 100%);
-  box-shadow: inset 0 0 40px rgba(139, 69, 19, 0.15);
+  box-shadow: inset 0 0 40px rgba(139, 69, 19, 0.15), 0 0 30px rgba(0,0,0,0.5);
   overflow: hidden;
-  max-height: 50px; /* Rolled up tightly */
+  max-height: 50px; 
   transition: max-height 3s cubic-bezier(0.3, 0.05, 0.1, 1);
   position: relative;
   z-index: 2;
 }
 
 .paper.open {
-  max-height: 5000px; /* Expands to fit the letter */
+  max-height: 5000px; 
 }
 
-/* The Red Ribbon */
 .ribbon-wrap {
   position: absolute;
   top: 0; left: 0;
@@ -412,15 +463,15 @@ button:hover {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
 }
 
-/* The Letter Content */
 .letter-content {
   padding: 60px 40px 80px 40px;
   opacity: 0;
-  transition: opacity 1.5s ease 1.5s; /* Delays fade-in until paper opens */
+  transition: opacity 1.5s ease 1.5s; 
   font-family: 'Caveat', cursive;
   font-size: 26px;
-  color: #2b1810; /* Dark brown ink color */
+  color: #2b1810; 
   line-height: 1.6;
+  text-shadow: 0px 0px 1px rgba(43, 24, 16, 0.2); 
 }
 
 .paper.open .letter-content {
@@ -438,20 +489,41 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* CONFETTI & PETALS */
-.confetti, .petal { position: fixed; pointer-events: none; z-index: 999; }
+/* CONFETTI & UPGRADED PETALS */
+.confetti, .petal { position: fixed; pointer-events: none; z-index: 150; }
 .confetti { top: -10px; animation: confettiFall linear forwards; }
-.petal { background: #ff758f; border-radius: 15px 0 15px 0; opacity: 0.8; }
 @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); } }
 
-/* For mobile text sizing */
+.petal { 
+  background: linear-gradient(135deg, #ff4d6d 0%, #ff758f 100%);
+  border-radius: 15px 0 15px 0; 
+  opacity: 0.85; 
+  box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.3), 1px 1px 3px rgba(0,0,0,0.2);
+  width: 15px;
+  height: 15px;
+  transition: opacity 0.5s ease;
+}
+
 @media (max-width: 600px) {
+  .box { padding: 40px 50px; }
+  .box p { font-size: 26px; }
   .letter-content { font-size: 22px; padding: 40px 20px; }
+  .intro-card { font-size: 35px; padding: 30px 40px; }
+  .center-text { font-size: 40px; }
 }
 </style>
 </head>
 
 <body>
+
+<script>
+  window.onerror = function(message, source, lineno, colno, error) {
+    var errorBox = document.createElement("div");
+    errorBox.style.cssText = "position:fixed; top:20px; left:20px; right:20px; background:white; color:red; z-index:9999; padding:20px; border:3px solid red; font-family:sans-serif; border-radius:10px;";
+    errorBox.innerHTML = "<strong>CRASH DETECTED!</strong><br>Error: " + message + "<br>Line: " + lineno + "<br><em>Please send this error to Moiz/AI so they can fix it.</em>";
+    document.body.appendChild(errorBox);
+  };
+</script>
 
 <audio id="music" src="blindspot.mp3" loop></audio>
 
@@ -507,6 +579,8 @@ button:hover {
 </div>
 
 <div class="black-page" id="blackPage">
+  <div class="stars" id="starsContainer"></div>
+
   <div class="scroll-wrapper">
     
     <div class="roller top-roller"></div>
@@ -520,14 +594,22 @@ button:hover {
       </div>
 
       <div class="letter-content" id="letterContent">
-        <h2>My Dearest Sania,</h2>
+               <h2>My Dearest Sania,</h2>
         
-        <p>Happy 1 Year Anniversary! I can't believe it's already been a year since you rejected me</p>
+        <p>Happy 1 Year Anniversary! I can't believe it's already been a year since you rejected me </p>
         
-        <p>This years fucking flown by so fast, we've had sooo many ups and a few downs but that's what makes this special, there has never been anyone I've loved as much as I love you my baby, we've been through sm together. Uk sometimes I look at you and I still cannot believe you are mine, it's fucking crazy how Ive trapped such a beautiful girl to fall in love with me, respect my game. We've grown too much together, ive gone from having a broken neck to having an injured back🤣 but ive been able to fight through it all j because of you. I am the person I am today only because you have been with me throughout and guided me down the correct path. Like I can't put into words how much you mean to me and how much I love you, I learnt how to fucking code for you bubs, this has taken me around 60 hrs to make and ive legit made coded this whole thing on my own with little help from AI and YouTube, so I really hope you like it.</p>
-        
-        <p>I love you forever,<br>Yours truly Moiz❤️</p>
-<p>ps ive bought this domain so every time you google lilbubzu.online you can see this</p>
+        <p>This year's flown by so fucking fast. We've had so many ups and a few downs, but that's what makes this special. There's never been anyone I've loved as much as I love you my baby. We've been through so much together. Sometimes I look at you and I still can't believe you're mine. It's fucking crazy how I've somehow managed to trap such a beautiful girl into falling in love with me, respect my game 😌</p>
+
+        <p>We've grown so much together. I've gone from having a broken neck to having an injured back 🤣 but I've been able to fight through it all only because of you.</p>
+
+        <p>I am the person I am today only because you've been with me throughout and guided me down the correct path. Like I can't put into words how much you mean to me and how much I love you. I learnt how to fucking code for you bubs.</p>
+
+        <p>This has taken me around 60 hours to make and I've coded this whole thing on my own with little help from AI and YouTube. So I really hope you like it.</p>
+
+        <p>I love you forever,<br><strong>Yours truly Moiz ❤️</strong></p>
+
+        <p style="margin-top: 35px; font-size: 22px;">ps. I've bought this domain so every time you google lilbubzu.online you can see this</p>
+
         
         <button class="close-btn" onclick="goBackToPinkPage()">Close Letter</button>
       </div>
@@ -539,10 +621,69 @@ button:hover {
   </div>
 </div>
 
-
 <script>
-/* QUESTION FLOW */
-function goQ2(){
+// Wait for the entire page to load before running ANY Javascript
+document.addEventListener('DOMContentLoaded', function() {
+
+  /* GENERATE STARS */
+  function createStars() {
+    const container = document.getElementById('starsContainer');
+    if (!container) return; // Safety check
+    for (let i = 0; i < 100; i++) {
+      let star = document.createElement('div');
+      star.className = 'star';
+      star.style.width = Math.random() * 3 + 'px';
+      star.style.height = star.style.width;
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDuration = Math.random() * 3 + 2 + 's';
+      star.style.animationDelay = Math.random() * 2 + 's';
+      container.appendChild(star);
+    }
+  }
+  createStars();
+
+  /* MEDIA CAROUSEL WITH CAPTIONS */
+  const topCarousel = document.getElementById("carouselTop");
+  const bottomCarousel = document.getElementById("carouselBottom");
+
+  const captions = [
+    "I love you ❤️", "1 year already 🫶", "Still stuck with me 😌", "My favourite person",
+    "More memories to go ✨", "You make me smile everyday ", "Best year of my life 🥂", "Lil Mrs. Bubzu",
+    "Can't wait for kisses", "I'm yours, always ", "My safe place ", "Forever isn't long enough ⏳",
+    "My Baby", "You and me against the world 🌍", "Every day is better with you ", "I adore you "
+  ];
+
+  let items = [];
+
+  for(let i=0; i<16; i++){
+    let mediaHTML = `<img src="photos/${i}.JPG" alt="Anniversary Memory">`;
+    
+    if(i < 9){
+      mediaHTML = `<video src="videos/${i}.MP4" autoplay muted loop playsinline></video>`;
+    }
+
+    items.push(`
+      <div class="polaroid">
+        ${mediaHTML}
+        <div class="polaroid-caption">${captions[i]}</div>
+      </div>
+    `);
+  }
+
+  let contentHTML = items.join("") + items.join("");
+  if (topCarousel) topCarousel.innerHTML = contentHTML;
+  if (bottomCarousel) bottomCarousel.innerHTML = contentHTML;
+
+}); // End of DOMContentLoaded
+
+/* GLOBAL FUNCTIONS (Attached to window so buttons can click them) */
+
+window.goQ2 = function(){
+  let music = document.getElementById("music");
+  music.volume = 0.5;
+  music.play().catch(()=>{ console.log("Audio waiting"); });
+
   document.getElementById('q1').style.opacity = '0';
   setTimeout(() => {
     document.getElementById('q1').style.display = "none";
@@ -550,27 +691,28 @@ function goQ2(){
   }, 300);
 }
 
-function startMain(){
-  document.getElementById('q2').style.display = "none";
-  document.querySelector(".envelope-screen").style.display = "flex";
+window.startMain = function(){
+  document.getElementById('q2').style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('q2').style.display = "none";
+    document.querySelector(".envelope-screen").style.display = "flex";
+  }, 300);
 }
 
-function showNo(){
+window.showNo = function(){
   document.getElementById('q1').style.display = "none";
   document.getElementById('q2').style.display = "none";
   document.getElementById('noScreen').style.display = "flex";
 }
 
-/* MAIN FLOW */
-function openSite(){
+window.openSite = function(){
   document.querySelector('.envelope').classList.add('open');
   
   let music = document.getElementById("music");
-  music.volume = 0.5;
-  music.play().catch(()=>{ console.log("Audio autoplay blocked"); });
+  music.play().catch(()=>{});
 
-  launchConfetti();
-  setTimeout(startPetals, 1000);
+  window.launchConfetti();
+  setTimeout(window.startPetals, 1000); 
 
   setTimeout(()=>{
     document.querySelector(".envelope-screen").style.opacity = "0";
@@ -597,112 +739,65 @@ function openSite(){
   }, 800);
 }
 
-/* MEDIA CAROUSEL WITH CAPTIONS */
-const topCarousel = document.getElementById("carouselTop");
-const bottomCarousel = document.getElementById("carouselBottom");
-
-const captions = [
-  "I love you ❤️", "1 year already 🫶", "Still stuck with me 😌", "My favourite person",
-  "More memories to go ✨", "You make me smile everyday ", "Best year of my life 🥂", "Lil Mrs. Bubzu",
-  "Can't wait for kisses", "I'm yours, always ", "My safe place ", "Forever isn't long enough ⏳",
-  "My Baby", "You and me against the world 🌍", "Every day is better with you ", "I adore you "
-];
-
-let items = [];
-
-for(let i=0; i<16; i++){
-  let mediaHTML = `<img src="photos/${i}.JPG" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f0f0f0\\'/></svg>'">`;
-  
-  if(i < 9){
-    mediaHTML = `<video src="videos/${i}.MP4" autoplay muted loop playsinline></video>`;
-  }
-
-  items.push(`
-    <div class="polaroid">
-      ${mediaHTML}
-      <div class="polaroid-caption">${captions[i]}</div>
-    </div>
-  `);
-}
-
-let contentHTML = items.join("") + items.join("");
-topCarousel.innerHTML = contentHTML;
-bottomCarousel.innerHTML = contentHTML;
-
-
-/* =========================================
-   NEW BLACK PAGE & SCROLL LOGIC (BUG FIXED)
-   ========================================= */
-
-function goToBlackPage() {
+window.goToBlackPage = function() {
   const content = document.getElementById('content');
   const blackPage = document.getElementById('blackPage');
   
-  // Fade out main site
+  window.stopPetals(); 
+
   content.style.opacity = '0';
   
   setTimeout(() => {
-    // Hide main site completely
     content.style.display = 'none';
-    
-    // Show black page and fade it in
     blackPage.style.display = 'block';
-    window.scrollTo(0, 0); // Scroll to top
+    window.scrollTo(0, 0); 
     
     setTimeout(() => {
       blackPage.style.opacity = '1';
     }, 50);
     
-  }, 800); // Matches the 0.8s CSS transition
+  }, 800); 
 }
 
-function untieRibbon() {
+window.untieRibbon = function() {
   const ribbonWrap = document.getElementById('ribbonWrap');
   const paper = document.getElementById('scrollPaper');
 
-  // Fade out ribbon
   ribbonWrap.style.opacity = '0';
   
   setTimeout(() => {
-    // Remove ribbon from layout so text can be clicked
     ribbonWrap.style.display = 'none';
-    
-    // Unfurl the paper
     paper.classList.add('open');
-  }, 500); // Matches ribbon transition
+  }, 500); 
 }
 
-function goBackToPinkPage() {
+window.goBackToPinkPage = function() {
   const content = document.getElementById('content');
   const blackPage = document.getElementById('blackPage');
   const ribbonWrap = document.getElementById('ribbonWrap');
   const paper = document.getElementById('scrollPaper');
 
-  // Fade out black page
   blackPage.style.opacity = '0';
   
   setTimeout(() => {
-    // Hide black page
     blackPage.style.display = 'none';
     
-    // ** THE BUG FIX: Reset the scroll completely **
     paper.classList.remove('open');
     ribbonWrap.style.display = 'flex';
     ribbonWrap.style.opacity = '1';
     
-    // Bring back main site
     content.style.display = 'block';
+    window.startPetals(); 
     
     setTimeout(() => {
       content.style.opacity = '1';
     }, 50);
 
-  }, 1000); // Wait for black page to fade out
+  }, 1000); 
 }
 
-
-/* CONFETTI & PETALS */
-function launchConfetti(){
+/* CONFETTI & UPGRADED PETALS LOGIC */
+window.launchConfetti = function(){
   const colors = ["#ff4d6d", "#ffb3c6", "#ffffff", "#ff8fa3"];
   for(let i=0; i<100; i++){
     let c = document.createElement("div");
@@ -718,7 +813,9 @@ function launchConfetti(){
   }
 }
 
-function createPetal(){
+let petalInterval;
+
+window.createPetal = function(){
   let p = document.createElement("div");
   p.className = "petal";
 
@@ -753,8 +850,19 @@ function createPetal(){
   requestAnimationFrame(animate);
 }
 
-function startPetals(){
-  setInterval(createPetal, 400);
+window.startPetals = function(){
+  if (!petalInterval) {
+    petalInterval = setInterval(window.createPetal, 350); 
+  }
+}
+
+window.stopPetals = function(){
+  clearInterval(petalInterval);
+  petalInterval = null;
+  document.querySelectorAll('.petal').forEach(p => {
+    p.style.opacity = '0';
+    setTimeout(() => p.remove(), 500);
+  });
 }
 </script>
 
