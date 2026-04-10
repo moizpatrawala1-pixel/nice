@@ -142,7 +142,7 @@ button:active {
   color: var(--primary-pink);
 }
 
-/* ===== NO SCREEN ===== */
+/* ===== NO SCREEN (FORGIVENESS ARC) ===== */
 .no-screen {
   position: fixed;
   top: 0;
@@ -310,7 +310,7 @@ button:active {
   text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
 }
 
-/* ===== LUXE CAROUSEL UPGRADE ===== */
+/* ===== LUXE CAROUSEL ===== */
 .carousel-container {
   overflow: hidden;
   margin: 20px 0;
@@ -330,16 +330,13 @@ button:active {
   transform: rotate(1deg);
 }
 
-/* FIX: The carousel ignores the mouse unless it's directly on a polaroid.
-  This stops the container's massive width from pausing the animation randomly.
-*/
 .carousel {
   display: flex;
   gap: 35px;
   width: max-content;
   align-items: center;
   will-change: transform;
-  pointer-events: none; /* Ignore the gaps */
+  pointer-events: none; /* Allows pausing ONLY on photos, not the empty gaps */
 }
 
 .carousel:hover {
@@ -350,7 +347,7 @@ button:active {
 .scroll-left { animation: scrollLeft 60s linear infinite; }
 
 .polaroid {
-  pointer-events: auto; /* Register the mouse only on the photo itself */
+  pointer-events: auto; /* Re-enable pointer events for the photo itself */
   background: white;
   padding: 15px 15px 45px 15px;
   width: 260px;
@@ -674,7 +671,7 @@ button:active {
     <div class="paper" id="scrollPaper">
       <div class="ribbon-wrap" id="ribbonWrap" onclick="untieRibbon()">
         <div class="ribbon">
-          <span class="bow"> Tap to untie </span>
+          <span class="bow">✨ Tap to untie ✨</span>
         </div>
       </div>
 
@@ -683,7 +680,7 @@ button:active {
 
         <p>Happy 1 Year Anniversary! I can't believe it's already been a year since you rejected me at first </p>
 
-        <p>One year. 365 days. And I still get butterflies when your name pops up on my phone.This year's flown by so fucking fast. We've had so many ups and a few downs, but that's what makes this special. There's never been anyone I've loved as much as I love you my baby. We've been through so much together. Sometimes I look at you and I still can't believe you're mine. It's fucking crazy how I've somehow managed to trap such a beautiful girl into falling in love with me, uve gotta respect my game 😌</p>
+        <p>One year. 365 days. And I still get butterflies when your name pops up on my phone.This year's flown by so fucking fast. We've had so many ups and a few downs, but that's what makes this special. There's never been anyone I've loved as much as I love you my baby. We've been through so much together. Sometimes I look at you and I still can't believe you're mine. It's fucking crazy how I've somehow managed to trap such a beautiful girl into falling in love with me — respect my game 😌</p>
 
         <p>We've grown so much together. I've gone from having a broken neck to having an injured back 🤣 but I've been able to fight through it all only because of you.</p>
 
@@ -724,7 +721,16 @@ const CAPTIONS = [
   "My Baby",
   "You and me against the world 🌍",
   "Every day is better with you",
-  "I adore you"
+  "I adore you",
+  "My whole heart 💖",
+  "So lucky to have you",
+  "You're my everything",
+  "Endless love 💞",
+  "Cutest girl ever",
+  "My beautiful girlfriend",
+  "One year down, forever to go",
+  "Love of my life",
+  "Mine 🥺"
 ];
 
 const CONFETTI_COLORS = ["#ff4d6d", "#ffb3c6", "#ffffff", "#ff8fa3"];
@@ -756,24 +762,46 @@ function buildCarousel() {
   
   if (!topCarousel || !bottomCarousel) return;
   
-  const items = [];
+  let videos = [];
+  let photos = [];
 
+  // Load the 9 Videos (0.MP4 to 8.MP4)
+  for (let i = 0; i < 9; i++) {
+    videos.push(`<video src="videos/${i}.MP4" autoplay muted loop playsinline></video>`);
+  }
+
+  // Load the 16 Photos (0.JPG to 15.JPG)
   for (let i = 0; i < 16; i++) {
-    const mediaHTML = i < 9
-      ? `<video src="videos/${i}.MP4" autoplay muted loop playsinline></video>`
-      : `<img src="photos/${i}.JPG" alt="Anniversary Memory">`;
+    photos.push(`<img src="photos/${i}.JPG" alt="Anniversary Memory">`);
+  }
 
-    // Add a random rotation angle between -8 and +8 degrees for the luxe effect
+  const items = [];
+  const totalItems = 25;
+
+  // Mix them together! Alternates Video, Photo until videos run out
+  for (let i = 0; i < totalItems; i++) {
+    let currentMediaHTML;
+    
+    if (i % 2 === 0 && videos.length > 0) {
+      currentMediaHTML = videos.shift();
+    } else if (photos.length > 0) {
+      currentMediaHTML = photos.shift();
+    } else if (videos.length > 0) {
+      currentMediaHTML = videos.shift();
+    }
+
+    // Add a random rotation angle for the luxe 3D effect
     const rot = (Math.random() - 0.5) * 16;
 
     items.push(`
       <div class="polaroid" style="--rot: ${rot}deg;">
-        ${mediaHTML}
-        <div class="polaroid-caption">${CAPTIONS[i]}</div>
+        ${currentMediaHTML}
+        <div class="polaroid-caption">${CAPTIONS[i] || "❤️"}</div>
       </div>
     `);
   }
 
+  // Duplicate the array so it scrolls infinitely without gaps
   const contentHTML = items.join("") + items.join("");
   topCarousel.innerHTML = contentHTML;
   bottomCarousel.innerHTML = contentHTML;
@@ -822,7 +850,6 @@ function resetToStart() {
   noScreen.style.display = "none";
   q1.style.display = "flex";
   
-  // A tiny delay ensures the CSS transition can trigger
   setTimeout(() => {
     q1.style.opacity = "1";
   }, 50);
