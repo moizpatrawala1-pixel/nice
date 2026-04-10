@@ -130,6 +130,7 @@ button:active {
   box-shadow: 0 20px 50px rgba(255, 77, 109, 0.25);
   transition: all 0.4s ease;
   animation: float 3s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes float {
@@ -273,6 +274,7 @@ button:active {
   display: flex;
   gap: 25px;
   width: max-content;
+  will-change: transform;
 }
 
 .scroll-right { animation: scrollRight 60s linear infinite; }
@@ -490,7 +492,7 @@ button:active {
 }
 
 /* CONFETTI & UPGRADED PETALS */
-.confetti, .petal { position: fixed; pointer-events: none; z-index: 150; }
+.confetti, .petal { position: fixed; pointer-events: none; z-index: 150; will-change: transform, opacity; }
 .confetti { top: -10px; animation: confettiFall linear forwards; }
 @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); } }
 
@@ -543,8 +545,9 @@ button:active {
   </div>
 </div>
 
-<div id="noScreen" class="no-screen" style="display:none;">
+<div id="noScreen" class="no-screen" style="display:none; flex-direction: column;">
   <p>well then fuck you</p>
+  <button style="margin-top: 20px; font-size: 20px;" onclick="window.location.reload()">Just kidding, let me in! 🥺</button>
 </div>
 
 <div class="envelope-screen" onclick="openSite()">
@@ -656,17 +659,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let items = [];
 
-  for(let i=0; i<16; i++){
-    let mediaHTML = `<img src="photos/${i}.JPG" alt="Anniversary Memory">`;
+  // Loop 25 times total (9 videos + 16 pictures)
+  for(let i=0; i<25; i++){
+    let mediaHTML = "";
     
     if(i < 9){
-      mediaHTML = `<video src="videos/${i}.MP4" autoplay muted loop playsinline></video>`;
+      // 0 through 8 are videos
+      mediaHTML = `<video src="videos/${i}.MP4" autoplay muted loop playsinline loading="lazy"></video>`;
+    } else {
+      // 9 through 24 are photos (we subtract 9 to get photos 0 through 15)
+      let photoIndex = i - 9;
+      mediaHTML = `<img src="photos/${photoIndex}.JPG" alt="Anniversary Memory" loading="lazy">`;
     }
+
+    // Safely cycle through the 16 captions so they don't break on item 17
+    let captionText = captions[i % captions.length];
 
     items.push(`
       <div class="polaroid">
         ${mediaHTML}
-        <div class="polaroid-caption">${captions[i]}</div>
+        <div class="polaroid-caption">${captionText}</div>
       </div>
     `);
   }
@@ -674,6 +686,13 @@ document.addEventListener('DOMContentLoaded', function() {
   let contentHTML = items.join("") + items.join("");
   if (topCarousel) topCarousel.innerHTML = contentHTML;
   if (bottomCarousel) bottomCarousel.innerHTML = contentHTML;
+
+  // Mobile touch pausing for the carousels
+  const carouselsList = document.querySelectorAll('.carousel');
+  carouselsList.forEach(c => {
+    c.addEventListener('touchstart', () => c.style.animationPlayState = 'paused');
+    c.addEventListener('touchend', () => c.style.animationPlayState = 'running');
+  });
 
 }); // End of DOMContentLoaded
 
