@@ -13,10 +13,52 @@ body {
   overflow-x: hidden;
 }
 
+/* QUESTION SCREENS */
+.question-screen {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:200;
+}
+
+.box {
+  text-align:center;
+  font-size:24px;
+}
+
+.box button {
+  margin:10px;
+  padding:10px 20px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* NO SCREEN */
+.no-screen {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:black;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:30px;
+  z-index:300;
+}
+
 /* ENVELOPE */
 .envelope-screen {
+  display:none;
   height: 100vh;
-  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -218,6 +260,28 @@ body {
 
 <audio id="music" src="blindspot.mp3" loop></audio>
 
+<!-- QUESTIONS -->
+<div id="q1" class="question-screen">
+  <div class="box">
+    <p>are you ready for ur gift?</p>
+    <button onclick="goQ2()">yes</button>
+    <button onclick="showNo()">no</button>
+  </div>
+</div>
+
+<div id="q2" class="question-screen" style="display:none;">
+  <div class="box">
+    <p>are you sure?????</p>
+    <button onclick="startMain()">yes</button>
+    <button onclick="showNo()">no</button>
+  </div>
+</div>
+
+<div id="noScreen" class="no-screen" style="display:none;">
+  <p>well then fuck you</p>
+</div>
+
+<!-- ENVELOPE -->
 <div class="envelope-screen" onclick="openSite()">
   <div class="envelope">
     <div class="envelope-flap"></div>
@@ -226,11 +290,12 @@ body {
   <div class="tap-text">open for ur surprise</div>
 </div>
 
-<!-- NEW INTRO SCREEN -->
+<!-- INTRO -->
 <div class="intro-screen" id="intro">
   <div class="intro-card">Happy 1 Year Bubzu ❤️</div>
 </div>
 
+<!-- CONTENT -->
 <div class="content" id="content">
 
   <div class="board">
@@ -255,17 +320,34 @@ body {
 
 <script>
 
+/* QUESTION FLOW */
+function goQ2(){
+  q1.style.display="none";
+  q2.style.display="flex";
+}
+
+function startMain(){
+  q2.style.display="none";
+  document.querySelector(".envelope-screen").style.display="flex";
+}
+
+function showNo(){
+  q1.style.display="none";
+  q2.style.display="none";
+  noScreen.style.display="flex";
+}
+
+/* MAIN FLOW */
 function openSite(){
   document.querySelector('.envelope').classList.add('open');
   document.getElementById("music").play().catch(()=>{});
 
   launchConfetti();
-  setTimeout(startPetals, 1000);
+  setTimeout(startPetals,1000);
 
   setTimeout(()=>{
     document.querySelector(".envelope-screen").style.display="none";
 
-    const intro = document.getElementById("intro");
     intro.classList.add("show");
 
     setTimeout(()=>{
@@ -273,7 +355,7 @@ function openSite(){
 
       setTimeout(()=>{
         intro.style.display="none";
-        document.getElementById("content").style.display="block";
+        content.style.display="block";
       },1000);
 
     },2500);
@@ -294,10 +376,9 @@ for(let i=0;i<16;i++){
   }
 }
 
-let content = items.join("") + items.join("");
-
-topCarousel.innerHTML = content;
-bottomCarousel.innerHTML = content;
+let contentHTML = items.join("") + items.join("");
+topCarousel.innerHTML = contentHTML;
+bottomCarousel.innerHTML = contentHTML;
 
 /* CONFETTI */
 function launchConfetti(){
@@ -315,30 +396,30 @@ function launchConfetti(){
 
 /* PETALS */
 function createPetal(){
-  let p = document.createElement("div");
-  p.className = "petal";
+  let p=document.createElement("div");
+  p.className="petal";
 
-  let startX = Math.random() * window.innerWidth;
-  let drift = (Math.random() - 0.5) * 150;
-  let duration = Math.random() * 4 + 6;
+  let startX=Math.random()*window.innerWidth;
+  let drift=(Math.random()-0.5)*150;
+  let duration=Math.random()*4+6;
 
-  p.style.left = startX + "px";
-  p.style.top = "-10px";
+  p.style.left=startX+"px";
+  p.style.top="-10px";
 
   document.body.appendChild(p);
 
-  let start = null;
+  let start=null;
 
   function animate(t){
-    if(!start) start = t;
-    let progress = (t - start) / (duration * 1000);
+    if(!start) start=t;
+    let progress=(t-start)/(duration*1000);
 
-    let y = progress * window.innerHeight;
-    let x = startX + drift * Math.sin(progress * Math.PI);
+    let y=progress*window.innerHeight;
+    let x=startX+drift*Math.sin(progress*Math.PI);
 
-    p.style.transform = `translate(${x}px, ${y}px) rotate(${progress*360}deg)`;
+    p.style.transform=`translate(${x}px,${y}px) rotate(${progress*360}deg)`;
 
-    if(progress < 1){
+    if(progress<1){
       requestAnimationFrame(animate);
     } else {
       p.remove();
@@ -349,7 +430,7 @@ function createPetal(){
 }
 
 function startPetals(){
-  setInterval(createPetal, 300);
+  setInterval(createPetal,300);
 }
 
 </script>
