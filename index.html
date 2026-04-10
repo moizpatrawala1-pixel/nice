@@ -658,18 +658,20 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
 
   let items = [];
+  let vCount = 0;
+  let pCount = 0;
 
   // Loop 25 times total (9 videos + 16 pictures)
   for(let i=0; i<25; i++){
     let mediaHTML = "";
     
-    if(i < 9){
-      // 0 through 8 are videos
-      mediaHTML = `<video src="videos/${i}.MP4" autoplay muted loop playsinline loading="lazy"></video>`;
+    // Spread exactly 9 videos and 16 photos evenly (1 video for approx every 2 photos)
+    if ( (i % 3 === 0 && vCount < 9) || pCount >= 16 ) {
+      mediaHTML = `<video src="videos/${vCount}.MP4" autoplay muted loop playsinline loading="lazy"></video>`;
+      vCount++;
     } else {
-      // 9 through 24 are photos (we subtract 9 to get photos 0 through 15)
-      let photoIndex = i - 9;
-      mediaHTML = `<img src="photos/${photoIndex}.JPG" alt="Anniversary Memory" loading="lazy">`;
+      mediaHTML = `<img src="photos/${pCount}.JPG" alt="Anniversary Memory" loading="lazy">`;
+      pCount++;
     }
 
     // Safely cycle through the 16 captions so they don't break on item 17
