@@ -172,18 +172,8 @@ body {
   height: 6px;
   background: #ffb6c1;
   border-radius: 50%;
-  opacity: 0.6;
+  opacity: 0.7;
   pointer-events: none;
-  animation: float linear forwards;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(-10px) translateX(0) rotate(0deg);
-  }
-  100% {
-    transform: translateY(110vh) translateX(40px) rotate(180deg);
-  }
 }
 </style>
 </head>
@@ -271,18 +261,42 @@ function launchConfetti(){
 
 /* PETALS */
 function createPetal(){
-  let p=document.createElement("div");
-  p.className="petal";
-  p.style.left=Math.random()*100+"vw";
-  p.style.animationDuration=(Math.random()*6+6)+"s";
+  let p = document.createElement("div");
+  p.className = "petal";
+
+  let startX = Math.random() * window.innerWidth;
+  let drift = (Math.random() - 0.5) * 150;
+  let duration = Math.random() * 4 + 6;
+
+  p.style.left = startX + "px";
+  p.style.top = "-10px";
+
   document.body.appendChild(p);
-  setTimeout(()=>p.remove(),12000);
+
+  let start = null;
+
+  function animate(t){
+    if(!start) start = t;
+    let progress = (t - start) / (duration * 1000);
+
+    let y = progress * window.innerHeight;
+    let x = startX + drift * Math.sin(progress * Math.PI);
+
+    p.style.transform = `translate(${x}px, ${y}px) rotate(${progress*360}deg)`;
+
+    if(progress < 1){
+      requestAnimationFrame(animate);
+    } else {
+      p.remove();
+    }
+  }
+
+  requestAnimationFrame(animate);
 }
 
 function startPetals(){
-  setInterval(createPetal,400);
+  setInterval(createPetal, 300);
 }
-
 </script>
 
 </body>
