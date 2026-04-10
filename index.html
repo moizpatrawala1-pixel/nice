@@ -8,8 +8,7 @@
 <style>
 body {
   margin: 0;
-  background: #000;
-  color: white;
+  background: #FFC0CB;
   font-family: Arial, sans-serif;
   overflow-x: hidden;
 }
@@ -21,56 +20,75 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: #111;
   cursor: pointer;
-  transition: opacity 0.8s ease;
 }
 
 .envelope {
-  width: 160px;
-  height: 110px;
-  background: #ff4d6d;
+  width: 260px;
+  height: 170px;
+  background: #ff9eb5;
   position: relative;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
-.envelope::before {
-  content: "";
+.envelope-flap {
   position: absolute;
-  border-left: 80px solid transparent;
-  border-right: 80px solid transparent;
-  border-bottom: 55px solid #ff758f;
-  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #D02E77;
+  clip-path: polygon(0 0,50% 60%,100% 0);
+  transform-origin: top;
+  transition: transform 1s ease;
 }
 
-.envelope-text {
+.open .envelope-flap {
+  transform: rotateX(-160deg);
+}
+
+.heart {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  background: white;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tap-text {
   margin-top: 20px;
-  opacity: 0.8;
+  color: #D02E77;
 }
 
 /* CONTENT */
 .content {
   display: none;
   padding: 20px;
-  opacity: 0;
-  transition: opacity 1s ease;
 }
 
-.content.show {
-  opacity: 1;
-}
-
-/* TITLE */
 .title {
   text-align: center;
   font-size: 28px;
-  margin-bottom: 20px;
-  animation: fadeIn 1.5s ease forwards;
+  color: #D02E77;
 }
 
-@keyframes fadeIn {
-  from {opacity:0; transform:translateY(10px);}
-  to {opacity:1; transform:translateY(0);}
+/* STICKY NOTES */
+.board {
+  margin: 30px auto;
+  width: 90%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+}
+
+.note {
+  background: #fff8a6;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 }
 
 /* CAROUSEL */
@@ -81,7 +99,7 @@ body {
 
 .carousel {
   display: flex;
-  gap: 25px;
+  gap: 20px;
 }
 
 .polaroid {
@@ -90,14 +108,6 @@ body {
   width: 220px;
   flex-shrink: 0;
   border-radius: 10px;
-  transition: transform 0.4s, filter 0.4s;
-  filter: blur(1px) brightness(0.8);
-}
-
-.polaroid.active {
-  transform: scale(1.1);
-  filter: blur(0) brightness(1);
-  z-index: 2;
 }
 
 .polaroid img,
@@ -105,21 +115,19 @@ body {
   width: 100%;
   height: 220px;
   object-fit: cover;
-  border-radius: 8px;
 }
 
-/* NAV */
+/* BUTTONS */
 .nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(0,0,0,0.5);
-  border: none;
   color: white;
-  font-size: 22px;
+  border: none;
+  font-size: 20px;
   padding: 10px;
   cursor: pointer;
-  z-index: 10;
 }
 
 .left { left: 10px; }
@@ -137,22 +145,6 @@ body {
 @keyframes fall {
   to { transform: translateY(110vh); }
 }
-
-/* PETALS */
-.petal {
-  position: fixed;
-  width: 10px;
-  height: 6px;
-  background: pink;
-  border-radius: 50%;
-  opacity: 0.7;
-  animation: float linear infinite;
-}
-
-@keyframes float {
-  from { transform: translateY(-10px); }
-  to { transform: translateY(110vh) translateX(50px); }
-}
 </style>
 </head>
 
@@ -160,41 +152,51 @@ body {
 
 <audio id="music" src="music.mp3" loop></audio>
 
-<div class="envelope-screen" id="envelope" onclick="openSite()">
-  <div class="envelope"></div>
-  <div class="envelope-text">open for ur surprise</div>
+<div class="envelope-screen" onclick="openSite()">
+  <div class="envelope">
+    <div class="envelope-flap"></div>
+    <div class="heart">❤️</div>
+  </div>
+  <div class="tap-text">open for ur surprise</div>
 </div>
 
 <div class="content" id="content">
+
   <div class="title">Happy 1 Year Bubzu ❤️</div>
+
+  <div class="board">
+    <div class="note">I love you ❤️</div>
+    <div class="note">1 year already 🫶</div>
+    <div class="note">Still stuck with me 😌</div>
+    <div class="note">My favourite human 💖</div>
+    <div class="note">More memories to go ✨</div>
+  </div>
 
   <div class="carousel-container">
     <button class="nav left" onclick="scrollManual(1)">⬅️</button>
     <div class="carousel" id="carousel"></div>
     <button class="nav right" onclick="scrollManual(-1)">➡️</button>
   </div>
+
 </div>
 
 <script>
 
 function openSite(){
-  const env = document.getElementById("envelope");
-  env.style.opacity = 0;
+  document.querySelector('.envelope').classList.add('open');
+  document.getElementById("music").play().catch(()=>{});
 
   setTimeout(()=>{
-    env.style.display="none";
-    const content = document.getElementById("content");
-    content.style.display="block";
-    setTimeout(()=>content.classList.add("show"),50);
+    document.querySelector(".envelope-screen").style.display="none";
+    document.getElementById("content").style.display="block";
   },800);
 
-  document.getElementById("music").play().catch(()=>{});
   launchConfetti();
 }
 
 /* MEDIA */
-const carousel = document.getElementById("carousel");
-let items = [];
+const carousel=document.getElementById("carousel");
+let items=[];
 
 for(let i=0;i<16;i++){
   items.push(`<div class="polaroid"><img src="photos/${i}.JPG"></div>`);
@@ -203,47 +205,23 @@ for(let i=0;i<16;i++){
   }
 }
 
-carousel.innerHTML = items.join("") + items.join("");
+carousel.innerHTML=items.join("")+items.join("");
 
-/* AUTO SCROLL */
-let scrollX=0;
-let speed=0.7;
-let paused=false;
+/* SCROLL */
+let scrollX=0, paused=false;
 
 function animate(){
   if(!paused){
-    scrollX -= speed;
-    carousel.style.transform = `translateX(${scrollX}px)`;
-
-    if(Math.abs(scrollX) > carousel.scrollWidth/2){
-      scrollX = 0;
-    }
+    scrollX-=0.7;
+    carousel.style.transform=`translateX(${scrollX}px)`;
+    if(Math.abs(scrollX)>carousel.scrollWidth/2) scrollX=0;
   }
-  highlightCenter();
   requestAnimationFrame(animate);
 }
 animate();
 
-/* DEPTH */
-function highlightCenter(){
-  const items = document.querySelectorAll(".polaroid");
-  items.forEach(el => el.classList.remove("active"));
-
-  let center = window.innerWidth / 2;
-
-  items.forEach(el=>{
-    const rect = el.getBoundingClientRect();
-    const mid = rect.left + rect.width/2;
-
-    if(Math.abs(center - mid) < 120){
-      el.classList.add("active");
-    }
-  });
-}
-
-/* BUTTON */
 function scrollManual(dir){
-  scrollX += dir * 250;
+  scrollX+=dir*250;
 }
 
 carousel.addEventListener("mouseenter",()=>paused=true);
@@ -251,8 +229,8 @@ carousel.addEventListener("mouseleave",()=>paused=false);
 
 /* CONFETTI */
 function launchConfetti(){
-  const colors=["#ff4d6d","#ffd166","#06d6a0","#118ab2","#f72585"];
-  for(let i=0;i<100;i++){
+  const colors=["#ff4d6d","#ffd166","#06d6a0","#118ab2"];
+  for(let i=0;i<80;i++){
     let c=document.createElement("div");
     c.className="confetti";
     c.style.left=Math.random()*100+"vw";
@@ -262,18 +240,6 @@ function launchConfetti(){
     setTimeout(()=>c.remove(),5000);
   }
 }
-
-/* PETALS */
-function createPetal(){
-  let p=document.createElement("div");
-  p.className="petal";
-  p.style.left=Math.random()*100+"vw";
-  p.style.animationDuration=(Math.random()*5+5)+"s";
-  document.body.appendChild(p);
-  setTimeout(()=>p.remove(),10000);
-}
-
-setInterval(createPetal,300);
 
 </script>
 
